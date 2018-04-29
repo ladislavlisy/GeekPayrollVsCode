@@ -1,0 +1,10 @@
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/obj/Debug/netcoreapp2.0/PayrollGeekApp.csproj.CoreCompileInputs.cache
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/obj/Debug/netcoreapp2.0/PayrollGeekApp.AssemblyInfoInputs.cache
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/obj/Debug/netcoreapp2.0/PayrollGeekApp.AssemblyInfo.cs
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/bin/Debug/netcoreapp2.0/PayrollGeekApp.deps.json
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/bin/Debug/netcoreapp2.0/PayrollGeekApp.runtimeconfig.json
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/bin/Debug/netcoreapp2.0/PayrollGeekApp.runtimeconfig.dev.json
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/bin/Debug/netcoreapp2.0/PayrollGeekApp.dll
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/bin/Debug/netcoreapp2.0/PayrollGeekApp.pdb
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/obj/Debug/netcoreapp2.0/PayrollGeekApp.dll
+/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/obj/Debug/netcoreapp2.0/PayrollGeekApp.pdb
