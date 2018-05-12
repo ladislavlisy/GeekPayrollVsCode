@@ -18,10 +18,16 @@ namespace ElementsLib.Module.Interfaces.Elements
         TargetPart Part();
         ConfigCode Code();
         TargetSeed Seed();
+        bool IsEqualByHead(IArticleTarget other);
+        bool IsEqualByHeadAndPart(IArticleTarget other);
         bool IsEqualByCodePlusHead(IArticleTarget other);
         bool IsEqualByCodePlusHeadAndPart(IArticleTarget other);
         bool IsEqualByCodePlusHead(ConfigCode otherCode, IArticleTarget other);
         bool IsEqualByCodePlusHeadAndPart(ConfigCode otherCode, IArticleTarget other);
+
+        bool IsEqualByCode(ConfigCode otherCode);
+        bool IsEqualByHead(TargetHead otherHead);
+        bool IsEqualByHeadAndPart(TargetHead otherHead, TargetPart otherPart);
         bool IsEqualByCodePlusSeed(ConfigCode otherCode, TargetSeed otherSeed);
         bool IsEqualByCodePlusHead(ConfigCode otherCode, TargetHead otherHead);
         bool IsEqualByCodePlusHeadAndSeed(ConfigCode otherCode, TargetHead otherHead, TargetSeed otherSeed);

@@ -9,6 +9,7 @@ namespace ElementsLib.Matrixus.Config
     using MasterStub = Module.Interfaces.Elements.IArticleSource;
 
     using DetailCode = UInt16;
+    using DetailGang = UInt16;
     using DetailType = UInt16;
     using DetailBind = UInt16;
     using DetailName = String;
@@ -18,6 +19,7 @@ namespace ElementsLib.Matrixus.Config
     using Module.Interfaces.Matrixus;
     using System.Reflection;
     using Module.Common;
+    using Legalist.Constants;
 
     public class ArticleConfigFactory : IArticleConfigFactory
     {
@@ -51,13 +53,23 @@ namespace ElementsLib.Matrixus.Config
 
             return symbolClass;
         }
-        public DetailItem CreateDetailItem(IArticleMasterCollection masterStore, DetailCode symbolCode, DetailName symbolName, MasterCode symbolRole, DetailType symbolType, DetailBind symbolBind, params DetailCode[] symbolPath)
+        public DetailItem CreateDetailItem(IArticleMasterCollection masterStore, DetailCode symbolCode, 
+            DetailName symbolName, MasterCode symbolRole, DetailGang symbolGang, 
+            DetailType symbolType, DetailBind symbolBind, 
+            TaxingBehaviour taxingType, HealthBehaviour healthType, SocialBehaviour socialType, 
+            params DetailCode[] symbolPath)
         {
             MasterItem elementNode = masterStore.FindArticleConfig(symbolRole);
 
-            MasterStub elementStub = elementNode.Stub();
+            DetailItem elementItem = new ArticleConfigDetail(symbolCode, symbolName, 
+                symbolGang, symbolType, symbolBind, 
+                taxingType, healthType, socialType, 
+                symbolPath);
 
-            DetailItem elementItem = new ArticleConfigDetail(symbolCode, symbolName, symbolType, symbolBind, symbolPath);
+            MasterStub elementStub = elementNode.CloneMasterStub(
+                symbolCode, symbolRole, symbolGang, 
+                symbolType, symbolBind, 
+                taxingType, healthType, socialType);
 
             elementItem.SetSymbolRole(symbolRole, elementStub);
 

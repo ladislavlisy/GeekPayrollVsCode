@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ElementsLib.Legalist.Versions.Social
 {
+    using TAmountDec = Decimal;
+
+    using Constants;
     using Module.Interfaces.Legalist;
     using Module.Items;
     public class SocialGuidingProfile : ISocialProfile
@@ -23,6 +26,41 @@ namespace ElementsLib.Legalist.Versions.Social
         public ISocialGuides Guides()
         {
             return InternalGuides;
+        }
+        public TAmountDec FactorEmployer()
+        {
+            return InternalGuides.FactorEmployer();
+        }
+        public TAmountDec IncludeGeneralIncomes(Period evalPeriod, WorkSocialTerms summarize,
+            TAmountDec includeIncome, TAmountDec excludeIncome)
+        {
+            TAmountDec totalIncome = decimal.Zero;
+            switch (summarize)
+            {
+                case WorkSocialTerms.SOCIAL_TERM_EMPLOYMENT:
+                case WorkSocialTerms.SOCIAL_TERM_SMALL_EMPL:
+                case WorkSocialTerms.SOCIAL_TERM_SHORT_MEET:
+                case WorkSocialTerms.SOCIAL_TERM_SHORT_DENY:
+                    totalIncome = decimal.Add(totalIncome, includeIncome);
+                    break;
+            }
+            return totalIncome;
+        }
+
+        public TAmountDec ExcludeGeneralIncomes(Period evalPeriod, WorkSocialTerms summarize,
+            TAmountDec includeIncome, TAmountDec excludeIncome)
+        {
+            TAmountDec totalIncome = decimal.Zero;
+            switch (summarize)
+            {
+                case WorkSocialTerms.SOCIAL_TERM_EMPLOYMENT:
+                case WorkSocialTerms.SOCIAL_TERM_SMALL_EMPL:
+                case WorkSocialTerms.SOCIAL_TERM_SHORT_MEET:
+                case WorkSocialTerms.SOCIAL_TERM_SHORT_DENY:
+                    totalIncome = decimal.Add(totalIncome, excludeIncome);
+                    break;
+            }
+            return totalIncome;
         }
     }
 }

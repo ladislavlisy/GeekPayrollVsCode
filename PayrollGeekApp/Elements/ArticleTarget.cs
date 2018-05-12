@@ -107,6 +107,26 @@ namespace ElementsLib.Elements
         {
             return (this.InternalHead == other.Head() && this.InternalPart == other.Part() && this.InternalCode == other.Code() && this.InternalSeed == other.Seed());
         }
+        public bool IsEqualByHead(IArticleTarget other)
+        {
+            return (this.InternalHead == other.Head());
+        }
+        public bool IsEqualByHeadAndPart(IArticleTarget other)
+        {
+            return (this.InternalHead == other.Head() && this.InternalPart == other.Part());
+        }
+        public bool IsEqualByCode(ConfigCode otherCode)
+        {
+            return (this.InternalCode == otherCode);
+        }
+        public bool IsEqualByHead(TargetHead otherHead)
+        {
+            return (this.InternalHead == otherHead);
+        }
+        public bool IsEqualByHeadAndPart(TargetHead otherHead, TargetPart otherPart)
+        {
+            return (this.InternalHead == otherHead && this.InternalPart == otherPart);
+        }
 
         public bool IsEqualByCodePlusHead(ConfigCode otherCode, IArticleTarget other)
         {

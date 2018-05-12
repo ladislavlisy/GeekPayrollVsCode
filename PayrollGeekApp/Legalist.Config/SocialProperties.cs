@@ -13,7 +13,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 0;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 0m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 0;
 
         public const decimal FACTOR_EMPLOYER = 0m;
 
@@ -35,7 +35,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 0;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1781280m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1781280;
 
         public const decimal FACTOR_EMPLOYER = 25.0m;
 
@@ -58,7 +58,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2011.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1206576m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1206576;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2011.FACTOR_EMPLOYER;
 
@@ -81,7 +81,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2012.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1242432m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1242432;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2012.FACTOR_EMPLOYER;
 
@@ -104,7 +104,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2013.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1245216m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1245216;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2013.FACTOR_EMPLOYER;
 
@@ -127,7 +127,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2014.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1277328m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1277328;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2014.FACTOR_EMPLOYER;
 
@@ -149,7 +149,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2015.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1277328m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1277328;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2015.FACTOR_EMPLOYER;
 
@@ -171,7 +171,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2016.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1277328m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1277328;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2016.FACTOR_EMPLOYER;
 
@@ -193,7 +193,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = SocialPropertiesVersion2017.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1277328m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1277328;
 
         public const decimal FACTOR_EMPLOYER = SocialPropertiesVersion2017.FACTOR_EMPLOYER;
 

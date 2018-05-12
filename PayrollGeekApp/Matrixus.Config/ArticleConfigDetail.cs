@@ -5,6 +5,7 @@ using System.Linq;
 namespace ElementsLib.Matrixus.Config
 {
     using ConfigCode = UInt16;
+    using ConfigGang = UInt16;
     using ConfigRole = UInt16;
     using ConfigType = UInt16;
     using ConfigBind = UInt16;
@@ -14,44 +15,22 @@ namespace ElementsLib.Matrixus.Config
     using Module.Interfaces.Matrixus;
     using Module.Interfaces.Elements;
     using Module.Libs;
+    using Legalist.Constants;
 
-    public class ArticleConfigDetail : IArticleConfigDetail
+    public class ArticleConfigDetail : ArticleConfigFeatures, IArticleConfigDetail
     {
-        protected ConfigCode InternalCode { get; set; }
-        protected ConfigRole InternalRole { get; set; }
-        protected ConfigType InternalType { get; set; }
-        protected ConfigBind InternalBind { get; set; }
         protected ConfigName InternalName { get; set; }
         protected IList<ConfigCode> InternalPath { get; set; }
         protected ConfigStub InternalStub { get; set; }
 
-        public ArticleConfigDetail(ConfigCode _code, ConfigName _name, ConfigType _type, ConfigBind _bind, params ConfigCode[] _path)
+        public ArticleConfigDetail(ConfigCode _code, ConfigName _name, ConfigGang _gang, 
+            ConfigType _type, ConfigBind _bind, 
+            TaxingBehaviour _taxing, HealthBehaviour _health, SocialBehaviour _social, params ConfigCode[] _path)
+            : base(_code, _gang, _type, _bind, _taxing, _health, _social)
         {
-            InternalCode = _code;
-
             InternalName = _name;
 
-            InternalType = _type;
-
-            InternalBind = _bind;
-
             InternalPath = _path.ToList();
-        }
-        public ConfigCode Code()
-        {
-            return InternalCode;
-        }
-        public ConfigRole Role()
-        {
-            return InternalRole;
-        }
-        public ConfigType Type()
-        {
-            return InternalType;
-        }
-        public ConfigBind Bind()
-        {
-            return InternalBind;
         }
         public ConfigName Name()
         {
@@ -61,31 +40,22 @@ namespace ElementsLib.Matrixus.Config
         {
             return InternalPath.ToArray();
         }
-        public ConfigStub Stub()
+        public ConfigStub DetailStub()
         {
             return InternalStub;
         }
 
-        public void SetSymbolCode(ConfigCode _code, ConfigName _name, ConfigType _type, ConfigBind _bind, params ConfigCode[] _path)
-        {
-            InternalCode = _code;
-
-            InternalName = _name;
-
-            InternalType = _type;
-
-            InternalPath = _path.ToList();
-        }
         public void SetSymbolRole(ConfigRole _role, ConfigStub _stub)
         {
-            InternalRole = _role;
+            base.SetSymbolRole(_role);
 
             InternalStub = _stub;
         }
-        public virtual object Clone()
+        public override object Clone()
         {
             ArticleConfigDetail cloneMaster = (ArticleConfigDetail)this.MemberwiseClone();
             cloneMaster.InternalCode = this.InternalCode;
+            cloneMaster.InternalGang = this.InternalGang;
             cloneMaster.InternalRole = this.InternalRole;
             cloneMaster.InternalType = this.InternalType;
             cloneMaster.InternalBind = this.InternalBind;

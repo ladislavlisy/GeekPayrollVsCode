@@ -5,7 +5,11 @@ using System.Linq;
 namespace ElementsLib.Elements
 {
     using ConfigCode = UInt16;
+    using ConfigBase = Module.Interfaces.Matrixus.IArticleConfigFeatures;
+    using ConfigGang = UInt16;
     using ConfigRole = UInt16;
+    using ConfigType = UInt16;
+    using ConfigBind = UInt16;
 
     using TargetItem = Module.Interfaces.Elements.IArticleTarget;
     using SourcePack = ResultMonad.Result<Module.Interfaces.Elements.IArticleSource, string>;
@@ -19,6 +23,10 @@ namespace ElementsLib.Elements
     using Module.Interfaces.Legalist;
     using Utils;
     using ResultMonad;
+    using Module.Interfaces.Matrixus;
+    using Matrixus.Config;
+    using Module.Libs;
+    using Legalist.Constants;
 
     public abstract class GeneralArticle : IArticleSource, ICloneable
     {
@@ -34,26 +42,36 @@ namespace ElementsLib.Elements
         public abstract ISourceValues ExportSourceValues();
         public GeneralArticle(ConfigRole role)
         {
-            InternalCode = 0;
+            InternalConfig = new ArticleConfigFeatures();
 
             InternalRole = role;
         }
 
-        protected ConfigCode InternalCode { get; set; }
+        protected IArticleConfigFeatures InternalConfig { get; set; }
         protected ConfigRole InternalRole { get; set; }
 
+        public ConfigBase Config()
+        {
+            return InternalConfig;
+        }
         public ConfigCode Code()
         {
-            return InternalCode;
+            return InternalConfig.Code();
         }
         public ConfigCode Role()
         {
-            return InternalRole;
+            return InternalConfig.Role();
         }
 
         public void SetSourceCode(ConfigCode code)
         {
-            InternalCode = code;
+            InternalConfig.SetSymbolCode(code);
+        }
+        public void SetSourceConfig(ConfigCode _code, ConfigRole _role, ConfigGang _gang, 
+            ConfigType _type, ConfigBind _bind, 
+            TaxingBehaviour _taxing, HealthBehaviour _health, SocialBehaviour _social)
+        {
+            InternalConfig.SetSymbolData(_code, _role, _gang, _type, _bind, _taxing, _health, _social);
         }
         public T SetSourceValues<T>(ISourceValues values) where T : class, ICloneable
         {
@@ -95,8 +113,7 @@ namespace ElementsLib.Elements
             }
             ISourceValues evalValues = ExportSourceValues();
 
-            return EvaluateArticleResults(evalTarget, InternalCode, evalValues, evalPeriod, evalProfile, evalResults);
-            //return InternalEvaluate(evalTarget, InternalCode, evalValues, evalPeriod, evalProfile, evalResults);
+            return EvaluateArticleResults(evalTarget, InternalConfig, evalValues, evalPeriod, evalProfile, evalResults);
         }
         protected ResultMonad.Result<ET, string> PrepareConceptValues<ET>(EvalValuesBuilder<ET> sourceBuilder, EvalValuesBuilder<ET> resultBuilder) where ET : class, new()
         {
@@ -109,7 +126,7 @@ namespace ElementsLib.Elements
 
             return evalBuilders.Aggregate(initValues, (agr, x) => (x.GetValues(agr)));
         }
-        protected abstract IEnumerable<ResultPack> EvaluateArticleResults(TargetItem evalTarget, ConfigCode evalCode, ISourceValues evalValues, Period evalPeriod, IPeriodProfile evalProfile, IEnumerable<ResultPair> evalResults);
+        protected abstract IEnumerable<ResultPack> EvaluateArticleResults(TargetItem evalTarget, ConfigBase evalConfig, ISourceValues evalValues, Period evalPeriod, IPeriodProfile evalProfile, IEnumerable<ResultPair> evalResults);
 
         public virtual ValidsPack ValidateEvaluateIntent(TargetItem evalTarget, Period evalPeriod, IPeriodProfile evalProfile, IEnumerable<ResultPair> evalResults)
         {
@@ -145,7 +162,7 @@ namespace ElementsLib.Elements
         public virtual object Clone()
         {
             GeneralArticle cloneArticle = (GeneralArticle)this.MemberwiseClone();
-            cloneArticle.InternalCode = this.InternalCode;
+            cloneArticle.InternalConfig = CloneUtils<IArticleConfigFeatures>.CloneOrNull(this.InternalConfig);
             cloneArticle.InternalRole = this.InternalRole;
 
             return cloneArticle;

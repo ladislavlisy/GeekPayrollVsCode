@@ -5,6 +5,7 @@ using System.Reflection;
 namespace ElementsLib.Module.Interfaces.Matrixus
 {
     using ConfigCode = UInt16;
+    using ConfigBase = Module.Interfaces.Matrixus.IArticleConfigFeatures;
     using ConfigType = UInt16;
     using ConfigBind = UInt16;
     using ConfigSort = Int32;

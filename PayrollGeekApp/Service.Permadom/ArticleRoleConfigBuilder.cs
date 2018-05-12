@@ -24,6 +24,7 @@ namespace ElementsLib.Service.Permadom
 
             return new ArticleRoleConfigData(roleData, roleName, rolePath);
         }
+        #region CONFIG_DATA
         public static IEnumerable<ConfigItem> GetConfigDataList()
         {
             IList<ConfigItem> configList = new List<ConfigItem>()
@@ -39,9 +40,36 @@ namespace ElementsLib.Service.Permadom
                 CreateConfigData(ConfigRoleEnum.ARTICLE_CONTRACT_WORKING),
                 CreateConfigData(ConfigRoleEnum.ARTICLE_CONTRACT_ABSENCE),
                 CreateConfigData(ConfigRoleEnum.ARTICLE_CONTRACT_ATTEND_ITEM),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_POSITION_MONTHLY_AMOUNT),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_DECLARATION),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_DECLARATION_HEALTH),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_DECLARATION_SOCIAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_GENERAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_HEALTH),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_SOCIAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_INCOMES_HEALTH),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_INCOMES_SOCIAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_ADVANCE),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_WITHHOLD_GENERAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_WITHHOLD_LOLEVEL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_WITHHOLD_TASKAGR),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_INCOMES_WITHHOLD_PARTNER),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_ADVANCE),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_WITHHOLD),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_ADVANCE_HEALTH),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_ADVANCE_SOCIAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_ADVANCE_PARTIAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_ADVANCE_ORDINARY),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_TAX_BASE_ADVANCE_SOLIDARY),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_BASE_HEALTH_COMPOUND),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_BASE_HEALTH_EMPLOYER),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_BASE_HEALTH_EMPLOYEE),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_HEALTH_FINAL),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_BASE_SOCIAL_COMPOUND),
+                CreateConfigData(ConfigRoleEnum.ARTICLE_INS_SOCIAL_FINAL),
             };
             return configList;
         }
-
+        #endregion
     }
 }

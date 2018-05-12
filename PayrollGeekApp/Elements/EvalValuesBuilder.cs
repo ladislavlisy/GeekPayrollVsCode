@@ -11,8 +11,8 @@ namespace ElementsLib.Elements
 
     public abstract class EvalValuesBuilder<TAGR>
     {
-        public static string CONCEPT_VALUES_INVALID_TEXT = "Invalid source values!";
-        public static string CONCEPT_RESULT_INVALID_TEXT = "Invalid dependent result values!";
+        public static string CONCEPT_VALUES_INVALID_TEXT = "Invalid source values! (look SourceBuilder::GetNewValues())";
+        public static string CONCEPT_RESULT_INVALID_TEXT = "Invalid dependent result values! (look ResultBuilder::GetNewValues())";
 
         public EvalValuesBuilder(string errorMessage)
         {

@@ -16,6 +16,7 @@ namespace ElementsLib.Legalist.Versions.Employ
     using Module.Interfaces.Legalist;
     using Module.Items;
     using Operations;
+    using Rounding;
 
     public class EmployGuidingProfile : IEmployProfile
     {
@@ -77,9 +78,13 @@ namespace ElementsLib.Legalist.Versions.Employ
         }
 
         public TAnmount SalaryAmountScheduleWork(Period period, TAnmount amountMonthly,
-            TSeconds fulltimeHour, TSeconds workingHours, TSeconds absenceHours)
+            TSeconds fulltimeHour, TSeconds workingsHours)
         {
-            return TAnmount.Zero;
+            decimal coeffSalary = 1.0m;
+
+            decimal salaryValue = RoundingPay.MonthlyAmountWithWorkingHours(amountMonthly, coeffSalary, fulltimeHour, workingsHours);
+
+            return salaryValue;
         }
     }
 }
