@@ -11,11 +11,8 @@ namespace ElementsLib.Elements.Config.Sources
 
     using Legalist.Constants;
     using Module.Interfaces.Elements;
-    using Module.Json;
     using Module.Libs;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-
+ 
     public class ContractAttendItemSource : ISourceValues, ICloneable
     {
         public TDay DayFrom { get; set; }
