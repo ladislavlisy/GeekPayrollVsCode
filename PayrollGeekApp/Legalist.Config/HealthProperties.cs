@@ -13,7 +13,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 0;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 0m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 0;
 
         public const decimal FACTOR_COMPOUND = 0m;
 
@@ -27,7 +27,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 8000;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1781280m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1781280;
 
         public const decimal FACTOR_COMPOUND = 13.5m;
 
@@ -41,7 +41,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = HealthPropertiesVersion2011.BASIS_MONTHLY_MINIMUM;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 1809864m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 1809864;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2011.FACTOR_COMPOUND;
 
@@ -58,7 +58,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 8500;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = 0m;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = 0;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2012.FACTOR_COMPOUND;
 
@@ -73,7 +73,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 8500;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2013.BASIS_ANNUAL_MAXIMUM;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2013.BASIS_ANNUAL_MAXIMUM;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2013.FACTOR_COMPOUND;
 
@@ -88,7 +88,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 9200;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2014.BASIS_ANNUAL_MAXIMUM;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2014.BASIS_ANNUAL_MAXIMUM;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2014.FACTOR_COMPOUND;
 
@@ -102,7 +102,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 9200;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2015.BASIS_ANNUAL_MAXIMUM;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2015.BASIS_ANNUAL_MAXIMUM;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2015.FACTOR_COMPOUND;
 
@@ -116,7 +116,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 9200;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2016.BASIS_ANNUAL_MAXIMUM;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2016.BASIS_ANNUAL_MAXIMUM;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2016.FACTOR_COMPOUND;
 
@@ -130,7 +130,7 @@ namespace ElementsLib.Legalist.Config
 
         public const Int32 BASIS_MONTHLY_MINIMUM = 9200;
 
-        public const decimal BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2017.BASIS_ANNUAL_MAXIMUM;
+        public const Int32 BASIS_ANNUAL_MAXIMUM = HealthPropertiesVersion2017.BASIS_ANNUAL_MAXIMUM;
 
         public const decimal FACTOR_COMPOUND = HealthPropertiesVersion2017.FACTOR_COMPOUND;
 

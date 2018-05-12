@@ -34,6 +34,6 @@ namespace ElementsLib.Module.Interfaces.Legalist
         TAnmount SalaryAmountScheduleFull(Period period, TAnmount amountMonthly);
 
         TAnmount SalaryAmountScheduleWork(Period period, TAnmount amountMonthly, 
-            TSeconds fulltimeHour, TSeconds workingHours, TSeconds absenceHours);
+            TSeconds fulltimeHour, TSeconds workingHours);
     }
 }

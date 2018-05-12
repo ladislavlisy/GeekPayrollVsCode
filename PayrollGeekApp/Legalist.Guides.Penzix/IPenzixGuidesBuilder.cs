@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace ElementsLib.Legalist.Guides.Penzix
 {
     using BundleVersion = UInt16;
+    using TAmountDec = Decimal;
+    using TAmountInt = Int32;
 
     using Module.Interfaces.Legalist;
     using Module.Items;
@@ -15,5 +17,7 @@ namespace ElementsLib.Legalist.Guides.Penzix
     {
         BundleVersion BuilderVersion();
         IPenzixGuides BuildPeriodGuides(Period period);
+
+        TAmountDec FactorEmployee(Period period);
     }
 }

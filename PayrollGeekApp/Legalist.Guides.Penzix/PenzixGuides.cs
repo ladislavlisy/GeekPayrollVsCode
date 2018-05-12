@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ElementsLib.Legalist.Guides.Penzix
 {
+    using TAmountDec = Decimal;
+    using TAmountInt = Int32;
+
     using Module.Interfaces.Legalist;
     using Module.Items;
     using Operations;
@@ -13,10 +16,15 @@ namespace ElementsLib.Legalist.Guides.Penzix
     public class PenzixGuides : IPenzixGuides
     {
         protected Period InternalPeriod { get; set; }
+        protected TAmountDec __FactorEmployee { get; set; }
 
-        public PenzixGuides(Period period)
+        public PenzixGuides(Period period, TAmountDec factorEmployee)
         {
             this.InternalPeriod = period;
+        }
+        public TAmountDec FactorEmployee()
+        {
+            return __FactorEmployee;
         }
     }
 }

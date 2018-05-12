@@ -10,6 +10,8 @@ namespace ElementsLib.Module.Items.Utils
     using PeriodMnth = Byte;
     using TSeconds = Int32;
     using TDay = Byte;
+    using Legalist.Constants;
+
     public static class PeriodUtils
     {
         public static int DayOfWeekMonToSun(int weekDayCode)
@@ -60,10 +62,54 @@ namespace ElementsLib.Module.Items.Utils
         public static TSeconds[] ScheduleFromTemplate(TSeconds[] template, TDay from, TDay stop)
         {
             TSeconds[] result = EmptyMonthSchedule();
-            for (TDay day = from; day < stop; day++)
+            for (TDay day = from; day <= stop; day++)
             {
                 int index = day - 1;
                 result[index] = template[index];
+            }
+            return result;
+        }
+        public static TSeconds[] ScheduleFromTimesheet(TSeconds[] timesheet, WorkDayPieceType[] pieceForDays, TSeconds[] hoursForDays, TDay from, TDay stop)
+        {
+            TSeconds[] result = EmptyMonthSchedule();
+            for (TDay day = from; day <= stop; day++)
+            {
+                int indexMonth = day - 1;
+                int indexDays = day - from;
+                WorkDayPieceType pieceForDay = pieceForDays[indexDays];
+                TSeconds hoursForDay = hoursForDays[indexDays];
+                TSeconds fullHoursTimesheet = timesheet[indexMonth];
+                TSeconds halfHoursTimesheet = fullHoursTimesheet/2;
+
+                switch (pieceForDay)
+                {
+                    case WorkDayPieceType.WORKDAY_NONE:
+                        result[indexMonth] = 0;
+                        break;
+                    case WorkDayPieceType.WORKDAY_FULL:
+                        result[indexMonth] = (fullHoursTimesheet);
+                        break;
+                    case WorkDayPieceType.WORKDAY_HALF:
+                        result[indexMonth] = (halfHoursTimesheet);
+                        break;
+                    case WorkDayPieceType.WORKDAY_TIME:
+                        result[indexMonth] = hoursForDay;
+                        break;
+                    default:
+                        result[indexMonth] = 0;
+                        break;
+                }
+            }
+            return result;
+        }
+        public static TSeconds[] ScheduleBaseSubtract(TSeconds[] template, TSeconds[] subtract, TDay from, TDay stop)
+        {
+            TSeconds[] result = EmptyMonthSchedule();
+            for (TDay day = from; day <= stop; day++)
+            {
+                int index = day - 1;
+                result[index] += template[index];
+                result[index] -= subtract[index];
             }
             return result;
         }
@@ -93,6 +139,19 @@ namespace ElementsLib.Module.Items.Utils
                 int index = day - 1;
                 result[index] = template[index];
             }
+            return result;
+        }
+
+        public static TSeconds TotalWeekHours(TSeconds[] template)
+        {
+            TSeconds result = template.Take(7).Aggregate(0, (agr, x) => (agr + x));
+
+            return result;
+        }
+        public static TSeconds TotalMonthHours(TSeconds[] template)
+        {
+            TSeconds result = template.Take(31).Aggregate(0, (agr, x) => (agr + x));
+
             return result;
         }
     }

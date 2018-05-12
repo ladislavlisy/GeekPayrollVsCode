@@ -17,13 +17,62 @@ namespace ElementsLib.Module.Items.Utils
         {
             return (resultA.IsFailure || resultB.IsFailure);
         }
+        public static TError FirstFailedResultError<AValue, BValue, TError>(Result<AValue, TError> resultA, Result<BValue, TError> resultB)
+        {
+            if (resultA.IsFailure)
+            {
+                return resultA.Error;
+            }
+            if (resultB.IsFailure)
+            {
+                return resultB.Error;
+
+            }
+            return default(TError);
+        }
         public static bool HaveAnyResultFailed<AValue, BValue, CValue, TError>(Result<AValue, TError> resultA, Result<BValue, TError> resultB, Result<CValue, TError> resultC)
         {
             return (resultA.IsFailure || resultB.IsFailure || resultC.IsFailure);
         }
+        public static TError FirstFailedResultError<AValue, BValue, CValue, TError>(Result<AValue, TError> resultA, Result<BValue, TError> resultB, Result<CValue, TError> resultC)
+        {
+            if (resultA.IsFailure)
+            {
+                return resultA.Error;
+            }
+            if (resultB.IsFailure)
+            {
+                return resultB.Error;
+            }
+            if (resultC.IsFailure)
+            {
+                return resultC.Error;
+            }
+            return default(TError);
+        }
         public static bool HaveAnyResultFailed<AValue, BValue, CValue, DValue, TError>(Result<AValue, TError> resultA, Result<BValue, TError> resultB, Result<CValue, TError> resultC, Result<DValue, TError> resultD)
         {
             return (resultA.IsFailure || resultB.IsFailure || resultC.IsFailure || resultD.IsFailure);
+        }
+        public static TError FirstFailedResultError<AValue, BValue, CValue, DValue, TError>(Result<AValue, TError> resultA, Result<BValue, TError> resultB, Result<CValue, TError> resultC, Result<DValue, TError> resultD)
+        {
+            if (resultA.IsFailure)
+            {
+                return resultA.Error;
+            }
+            if (resultB.IsFailure)
+            {
+                return resultB.Error;
+            }
+            if (resultC.IsFailure)
+            {
+                return resultC.Error;
+            }
+            if (resultD.IsFailure)
+            {
+                return resultD.Error;
+            }
+            return default(TError);
         }
         public static Result<IEnumerable<Tuple<TAValue, TBValue>>, TError> Zip2ToResultWithZipListAndError<TAValue, TBValue, TError>(
             IEnumerable<TAValue> resultsA, IEnumerable<TBValue> resultsB,

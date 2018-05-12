@@ -5,6 +5,7 @@ using System.Linq;
 namespace ElementsLib.Elements.Utils
 {
     using ConfigCode = UInt16;
+    using ConfigBase = Module.Interfaces.Matrixus.IArticleConfigFeatures;
 
     using TargetHead = UInt16;
     using TargetPart = UInt16;
@@ -14,6 +15,7 @@ namespace ElementsLib.Elements.Utils
     using ResultItem = Module.Interfaces.Elements.IArticleResult;
     using ResultPack = ResultMonad.Result<Module.Interfaces.Elements.IArticleResult, string>;
     using ResultPair = KeyValuePair<Module.Interfaces.Elements.IArticleTarget, ResultMonad.Result<Module.Interfaces.Elements.IArticleResult, string>>;
+    using ValuesItem = Module.Interfaces.Elements.IArticleResultValues;
 
     using Module.Libs;
     using ResultMonad;
@@ -26,220 +28,277 @@ namespace ElementsLib.Elements.Utils
         public static string ERROR_TEXT_POSITION_NOT_FOUND = "Position Result not found!";
         public static string ERROR_TEXT_CONTRACT_CODE_NOT_FOUND = "Result for Contract Target and Code not found!";
         public static string ERROR_TEXT_POSITION_CODE_NOT_FOUND = "Result for Position Target and Code not found!";
-        public static ResultPack FindContractResultForCode(this IEnumerable<ResultPair> evalResults, ConfigCode contractCode, TargetSeed contractSeed)
-        {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusSeed(contractCode, contractSeed));
+        public static string ERROR_TEXT_RESULTS_CASTING_FAILED = "Failed casting";
+        public static string ERROR_TEXT_RESULTS_LOOKUP_FAILED = "Failed value lookup";
+        public static string ERROR_TEXT_RESULTS_SELECT_FAILED = "Failed value select";
 
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
+        public static ResultPack FindResult(this IEnumerable<ResultPair> evalResults, Func<TargetItem, bool> filterTargetFunc)
+        {
+            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterTargetFunc, ERROR_TEXT_CONTRACT_CODE_NOT_FOUND);
 
             return findResult;
         }
-
-        public static Result<TResult, string> FindContractTypeResultForCode<TResult>(this IEnumerable<ResultPair> evalResults, ConfigCode contractCode, TargetSeed contractSeed) where TResult : class, ResultItem
+        public static Result<TResult, string> FindTypeResult<TResult>(this IEnumerable<ResultPair> evalResults, 
+            Func<TargetItem, bool> filterTargetFunc) where TResult : class, ResultItem
         {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusSeed(contractCode, contractSeed));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
+            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterTargetFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
             if (findResult.IsFailure)
             {
                 return Result.Fail<TResult, string>(findResult.Error);
             }
-            TResult typeResult = findResult.Value as TResult;
+            ResultItem itemResult = findResult.Value;
+
+            TResult typeResult = itemResult as TResult;
             if (typeResult == null)
             {
-                return Result.Fail<TResult, string>("Failed casting");
+                return Result.Fail<TResult, string>(itemResult.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
             }
             return Result.Ok<TResult, string>(typeResult);
         }
-        public static Result<TRValue, string> FindContractResultValueForCode<TResult, TRValue>(this IEnumerable<ResultPair> evalResults, 
-            ConfigCode contractCode, TargetSeed contractSeed, 
-            Func<IArticleResultValues, bool> getValsFunc) 
+        public static Result<TRValue, string> FindResultValue<TResult, TRValue>(this IEnumerable<ResultPair> evalResults, 
+            Func<TargetItem, bool> filterTargetFunc,
+            Func<ValuesItem, bool> selectValuesFunc)
             where TResult : class, ResultItem
-            where TRValue : class, IArticleResultValues
+            where TRValue : class, ValuesItem
         {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusSeed(contractCode, contractSeed));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
+            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterTargetFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
             if (findResult.IsFailure)
             {
                 return Result.Fail<TRValue, string>(findResult.Error);
             }
-            TResult typeResult = findResult.Value as TResult;
+            ResultItem itemResult = findResult.Value;
+
+            TResult typeResult = itemResult as TResult;
             if (typeResult == null)
             {
-                return Result.Fail<TRValue, string>("Failed casting");
+                return Result.Fail<TRValue, string>(itemResult.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
             }
-            Maybe<TRValue> typeValues = typeResult.ReturnValue<TRValue>(getValsFunc);
+            Maybe<TRValue> typeValues = typeResult.ReturnValue<TRValue>(selectValuesFunc);
             if (typeValues.HasNoValue)
             {
-                return Result.Fail<TRValue, string>("Failed value lookup");
+                return Result.Fail<TRValue, string>(typeResult.DecoratedError(ERROR_TEXT_RESULTS_LOOKUP_FAILED));
             }
             return Result.Ok<TRValue, string>(typeValues.Value);
         }
-
-        public static ResultPack FindPositionResultForCode(this IEnumerable<ResultPair> evalResults, ConfigCode positionCode, TargetHead contractCode, TargetSeed positionSeed)
-        {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndSeed(positionCode, contractCode, positionSeed));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_POSITION_NOT_FOUND);
-
-            return findResult;
-        }
-
-        public static Result<TResult, string> FindPositionTypeResultForCode<TResult>(this IEnumerable<ResultPair> evalResults, ConfigCode positionCode, TargetHead contractCode, TargetSeed positionSeed) where TResult : class, ResultItem
-        {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndSeed(positionCode, contractCode, positionSeed));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
-            if (findResult.IsFailure)
-            {
-                return Result.Fail<TResult, string>(findResult.Error);
-            }
-            TResult typeResult = findResult.Value as TResult;
-            if (typeResult == null)
-            {
-                return Result.Fail<TResult, string>("Failed casting");
-            }
-            return Result.Ok<TResult, string>(typeResult);
-        }
-        public static Result<TRValue, string> FindPositionResultValueForCode<TResult, TRValue>(this IEnumerable<ResultPair> evalResults, ConfigCode positionCode, TargetHead contractCode, TargetSeed positionSeed, 
-            Func<IArticleResultValues, bool> getValsFunc) 
+        public static Result<TAValue, string> FindAndTransformResultValue<TResult, TRValue, TAValue>(this IEnumerable<ResultPair> evalResults, 
+            Func<TargetItem, bool> filterTargetFunc,
+            Func<ValuesItem, bool> selectValuesFunc, Func<TRValue, Result<TAValue, string>> selectResultFunc)
             where TResult : class, ResultItem
-            where TRValue : class, IArticleResultValues
+            where TRValue : class, ValuesItem
         {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndSeed(positionCode, contractCode, positionSeed));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
+            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterTargetFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
             if (findResult.IsFailure)
             {
-                return Result.Fail<TRValue, string>(findResult.Error);
+                return Result.Fail<TAValue, string>(findResult.Error);
             }
-            TResult typeResult = findResult.Value as TResult;
+            ResultItem itemResult = findResult.Value;
+
+            TResult typeResult = itemResult as TResult;
             if (typeResult == null)
             {
-                return Result.Fail<TRValue, string>("Failed casting");
+                return Result.Fail<TAValue, string>(itemResult.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
             }
-            Maybe<TRValue> typeValues = typeResult.ReturnValue<TRValue>(getValsFunc);
+            Maybe<TRValue> typeValues = typeResult.ReturnValue<TRValue>(selectValuesFunc);
             if (typeValues.HasNoValue)
             {
-                return Result.Fail<TRValue, string>("Failed value lookup");
+                return Result.Fail<TAValue, string>(typeResult.DecoratedError(ERROR_TEXT_RESULTS_LOOKUP_FAILED));
             }
-            return Result.Ok<TRValue, string>(typeValues.Value);
-        }
-
-        public static ResultPack FindResultForCodePlusHead(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode)
-        {
-            TargetPart partCode = ArticleTarget.PART_CODE_NULL;
-
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndPart(findCode, headCode, partCode));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_CODE_NOT_FOUND);
-
-            return findResult;
-        }
-        public static Result<TResult, string> FindTypeResultForCodePlusHead<TResult>(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode) where TResult : class, ResultItem
-        {
-            TargetPart partCode = ArticleTarget.PART_CODE_NULL;
-
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndPart(findCode, headCode, partCode));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
-            if (findResult.IsFailure)
+            Result<TAValue, string> tranResult = selectResultFunc(typeValues.Value);
+            if (tranResult.IsFailure)
             {
-                return Result.Fail<TResult, string>(findResult.Error);
+                return Result.Fail<TAValue, string>(typeResult.DecoratedError(ERROR_TEXT_RESULTS_SELECT_FAILED));
             }
-            TResult typeResult = findResult.Value as TResult;
-            if (typeResult == null)
-            {
-                return Result.Fail<TResult, string>("Failed casting");
-            }
-            return Result.Ok<TResult, string>(typeResult);
+            return Result.Ok<TAValue, string>(tranResult.Value);
         }
-        public static Result<TRValue, string> FindResultValueForCodePlusHead<TResult, TRValue>(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode,
-            Func<IArticleResultValues, bool> getValsFunc)
+
+        public static Result<IEnumerable<ResultPair>, string> GetTypedResultsInListAndError<TResult>(this IEnumerable<ResultPair> evalResults,
+            Func<TargetItem, bool> filterTargetFunc) where TResult : class, ResultItem
+        {
+            Func<Result<IEnumerable<ResultPair>, string>, ResultPair,
+                Func<TargetItem, bool>, Result<IEnumerable<ResultPair>, string>> agrFunc = (bAgr, a, tFilter) => {
+                    if (bAgr.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<ResultPair>, string>(bAgr.Error);
+                    }
+                    IEnumerable<ResultPair> bAgrList = bAgr.Value;
+                    Result<ResultItem, string> aResult = a.Value;
+                    if (aResult.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<ResultPair>, string>(aResult.Error);
+                    }
+                    TargetItem aParamKey = a.Key;
+                    if (tFilter(aParamKey) == false)
+                    {
+                        return Result.Ok<IEnumerable<ResultPair>, string>(bAgrList);
+                    }
+                    ResultItem itemResult = aResult.Value;
+
+                    TResult typeResult = itemResult as TResult;
+                    if (typeResult == null)
+                    {
+                        return Result.Fail<IEnumerable<ResultPair>, string>(itemResult.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
+                    }
+                    IEnumerable<ResultPair> resultList = bAgrList.Merge(a).OrderBy((x) => (x.Key));
+
+                    return Result.Ok<IEnumerable<ResultPair>, string>(resultList);
+                };
+
+            Result<IEnumerable<ResultPair>, string> initResult = Result.Ok<IEnumerable<ResultPair>, string>(new List<ResultPair>());
+            return evalResults.Aggregate(initResult, (agr, x) => agrFunc(agr, x, filterTargetFunc));
+        }
+        public static Result<IEnumerable<TRValue>, string> GetResultValuesInListAndError<TResult, TRValue>(this IEnumerable<ResultPair> evalResults,
+            Func<TargetItem, bool> filterTargetFunc, Func<TResult, bool> filterValuesFunc,
+            Func<ValuesItem, bool> selectValuesFunc)
             where TResult : class, ResultItem
-            where TRValue : class, IArticleResultValues
+            where TRValue : class, ValuesItem
         {
-            TargetPart partCode = ArticleTarget.PART_CODE_NULL;
+            Func<Result<IEnumerable<TRValue>, string>, ResultPair,
+                Func<TargetItem, bool>, Func<TResult, bool>, Func<ValuesItem, bool>,
+                Result<IEnumerable<TRValue>, string>> agrFunc = (bAgr, a, tFilter, vFilter, exfunc) => {
+                    if (bAgr.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<TRValue>, string>(bAgr.Error);
+                    }
+                    IEnumerable<TRValue> bAgrList = bAgr.Value;
+                    Result<ResultItem, string> aResult = a.Value;
+                    if (aResult.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<TRValue>, string>(aResult.Error);
+                    }
+                    TargetItem aParamKey = a.Key;
+                    if (tFilter(aParamKey) == false)
+                    {
+                        return Result.Ok<IEnumerable<TRValue>, string>(bAgrList);
+                    }
+                    ResultItem aParamRes = aResult.Value;
 
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndPart(findCode, headCode, partCode));
+                    TResult aParamVal = aParamRes as TResult;
+                    if (aParamVal == null)
+                    {
+                        return Result.Fail<IEnumerable<TRValue>, string>(aParamRes.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
+                    }
+                    if (vFilter(aParamVal) == false)
+                    {
+                        return Result.Ok<IEnumerable<TRValue>, string>(bAgrList);
+                    }
+                    Maybe<TRValue> typeValues = aParamVal.ReturnValue<TRValue>(exfunc);
+                    if (typeValues.HasNoValue)
+                    {
+                        return Result.Fail<IEnumerable<TRValue>, string>(aParamVal.DecoratedError(ERROR_TEXT_RESULTS_LOOKUP_FAILED));
+                    }
+                    IEnumerable<TRValue> resultList = bAgrList.Merge(typeValues.Value);
 
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
-            if (findResult.IsFailure)
-            {
-                return Result.Fail<TRValue, string>(findResult.Error);
-            }
-            TResult typeResult = findResult.Value as TResult;
-            if (typeResult == null)
-            {
-                return Result.Fail<TRValue, string>("Failed casting");
-            }
-            Maybe<TRValue> typeValues = typeResult.ReturnValue<TRValue>(getValsFunc);
-            if (typeValues.HasNoValue)
-            {
-                return Result.Fail<TRValue, string>("Failed value lookup");
-            }
-            return Result.Ok<TRValue, string>(typeValues.Value);
+                    return Result.Ok<IEnumerable<TRValue>, string>(resultList);
+                };
+
+            Result<IEnumerable<TRValue>, string> initResult = Result.Ok<IEnumerable<TRValue>, string>(new List<TRValue>());
+            return evalResults.Aggregate(initResult, (agr, x) => agrFunc(agr, x, filterTargetFunc, filterValuesFunc, selectValuesFunc));
         }
-
-
-        public static ResultPack FindResultForCodePlusPart(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode, TargetPart partCode)
-        {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndPart(findCode, headCode, partCode));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_POSITION_CODE_NOT_FOUND);
-
-            return findResult;
-        }
-        public static Result<TResult, string> FindTypeResultForCodePlusPart<TResult>(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode, TargetPart partCode) where TResult : class, ResultItem
-        {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndPart(findCode, headCode, partCode));
-
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
-            if (findResult.IsFailure)
-            {
-                return Result.Fail<TResult, string>(findResult.Error);
-            }
-            TResult typeResult = findResult.Value as TResult;
-            if (typeResult == null)
-            {
-                return Result.Fail<TResult, string>("Failed casting");
-            }
-            return Result.Ok<TResult, string>(typeResult);
-        }
-        public static Result<TRValue, string> FindResultValueForCodePlusPart<TResult, TRValue>(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode, TargetPart partCode,
-            Func<IArticleResultValues, bool> getValsFunc)
+        public static Result<IEnumerable<TSValue>, string> GetResultValuesInListAndError<TResult, TRValue, TSValue>(this IEnumerable<ResultPair> evalResults,
+            Func<TargetItem, bool> filterTargetFunc, Func<TResult, bool> filterValuesFunc,
+            Func<ValuesItem, bool> selectValuesFunc, Func<TargetItem, TRValue, Result<TSValue, string>> selectResultFunc)
             where TResult : class, ResultItem
-            where TRValue : class, IArticleResultValues
+            where TRValue : class, ValuesItem
         {
-            Func<TargetItem, bool> filterFunc = (x) => (x.IsEqualByCodePlusHeadAndPart(findCode, headCode, partCode));
+            Func<Result<IEnumerable<TSValue>, string>, ResultPair,
+                Func<TargetItem, bool>, Func<TResult, bool>, Func<ValuesItem, bool>, Func<TargetItem, TRValue, Result<TSValue, string>>,
+                Result<IEnumerable<TSValue>, string>> agrFunc = (bAgr, a, tFilter, vFilter, vSelect, rSelect) => {
+                    if (bAgr.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<TSValue>, string>(bAgr.Error);
+                    }
+                    IEnumerable<TSValue> bAgrList = bAgr.Value;
+                    Result<ResultItem, string> aResult = a.Value;
+                    if (aResult.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<TSValue>, string>(aResult.Error);
+                    }
+                    TargetItem aParamKey = a.Key;
+                    if (tFilter(aParamKey) == false)
+                    {
+                        return Result.Ok<IEnumerable<TSValue>, string>(bAgrList);
+                    }
+                    ResultItem aParamRes = aResult.Value;
 
-            ResultPack findResult = evalResults.FirstToResultWithValueAndError(filterFunc, ERROR_TEXT_CONTRACT_NOT_FOUND);
-            if (findResult.IsFailure)
-            {
-                return Result.Fail<TRValue, string>(findResult.Error);
-            }
-            TResult typeResult = findResult.Value as TResult;
-            if (typeResult == null)
-            {
-                return Result.Fail<TRValue, string>("Failed casting");
-            }
-            Maybe<TRValue> typeValues = typeResult.ReturnValue<TRValue>(getValsFunc);
-            if (typeValues.HasNoValue)
-            {
-                return Result.Fail<TRValue, string>("Failed value lookup");
-            }
-            return Result.Ok<TRValue, string>(typeValues.Value);
+                    TResult aParamVal = aParamRes as TResult;
+                    if (aParamVal == null)
+                    {
+                        return Result.Fail<IEnumerable<TSValue>, string>(aParamRes.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
+                    }
+                    if (vFilter(aParamVal) == false)
+                    {
+                        return Result.Ok<IEnumerable<TSValue>, string>(bAgrList);
+                    }
+                    Maybe<TRValue> typeValues = aParamVal.ReturnValue<TRValue>(vSelect);
+                    if (typeValues.HasNoValue)
+                    {
+                        return Result.Fail<IEnumerable<TSValue>, string>(aParamVal.DecoratedError(ERROR_TEXT_RESULTS_LOOKUP_FAILED));
+                    }
+                    Result<TSValue, string> selResult = rSelect(aParamKey, typeValues.Value);
+                    if (selResult.IsFailure)
+                    {
+                        return Result.Fail<IEnumerable<TSValue>, string>(aParamVal.DecoratedError(ERROR_TEXT_RESULTS_SELECT_FAILED));
+                    }
+
+                    IEnumerable<TSValue> resultList = bAgrList.Merge(selResult.Value);
+
+                    return Result.Ok<IEnumerable<TSValue>, string>(resultList);
+                };
+
+            Result<IEnumerable<TSValue>, string> initResult = Result.Ok<IEnumerable<TSValue>, string>(new List<TSValue>());
+            return evalResults.Aggregate(initResult, (agr, x) => agrFunc(agr, x, filterTargetFunc, filterValuesFunc, selectValuesFunc, selectResultFunc));
         }
-
-
-        public static IEnumerable<ResultPair> GetResultForCodePlusHead(this IEnumerable<ResultPair> evalResults, ConfigCode findCode, TargetHead headCode)
+        public static Result<TAValue, string> GetResultValuesInAggrAndError<TResult, TRValue, TAValue>(this IEnumerable<ResultPair> evalResults, TAValue initValues,
+            Func<TargetItem, bool> filterTargetFunc, Func<TResult, bool> filterValuesFunc,
+            Func<ValuesItem, bool> selectValuesFunc, Func<TAValue, TargetItem, TRValue, Result<TAValue, string>> selectResultFunc)
+            where TResult : class, ResultItem
+            where TRValue : class, ValuesItem
         {
-            Func<ResultPair, bool> filterFunc = (x) => (x.Key.IsEqualByCodePlusHead(findCode, headCode));
+            Func<Result<TAValue, string>, ResultPair,
+                Func<TargetItem, bool>, Func<TResult, bool>, Func<ValuesItem, bool>, Func<TAValue, TargetItem, TRValue, Result<TAValue, string>>,
+                Result<TAValue, string>> agrFunc = (bAgr, a, tFilter, vFilter, vSelect, rSelect) => {
+                    if (bAgr.IsFailure)
+                    {
+                        return Result.Fail<TAValue, string>(bAgr.Error);
+                    }
+                    TAValue bAgrValue = bAgr.Value;
+                    Result<ResultItem, string> aResult = a.Value;
+                    if (aResult.IsFailure)
+                    {
+                        return Result.Fail<TAValue, string>(aResult.Error);
+                    }
+                    TargetItem aParamKey = a.Key;
+                    if (tFilter(aParamKey) == false)
+                    {
+                        return Result.Ok<TAValue, string>(bAgrValue);
+                    }
+                    ResultItem aParamRes = aResult.Value;
 
-            IEnumerable<ResultPair> findResults = evalResults.Where(filterFunc);
+                    TResult aParamVal = aParamRes as TResult;
+                    if (aParamVal == null)
+                    {
+                        return Result.Fail<TAValue, string>(aParamRes.DecoratedError(ERROR_TEXT_RESULTS_CASTING_FAILED));
+                    }
+                    if (vFilter(aParamVal) == false)
+                    {
+                        return Result.Ok<TAValue, string>(bAgrValue);
+                    }
+                    Maybe<TRValue> typeValues = aParamVal.ReturnValue<TRValue>(vSelect);
+                    if (typeValues.HasNoValue)
+                    {
+                        return Result.Fail<TAValue, string>(aParamVal.DecoratedError(ERROR_TEXT_RESULTS_LOOKUP_FAILED));
+                    }
+                    Result<TAValue, string> selResult = rSelect(bAgrValue, aParamKey, typeValues.Value);
+                    if (selResult.IsFailure)
+                    {
+                        return Result.Fail<TAValue, string>(aParamVal.DecoratedError(ERROR_TEXT_RESULTS_SELECT_FAILED));
+                    }
 
-            return findResults;
+                    return Result.Ok<TAValue, string>(selResult.Value);
+                };
+
+            Result<TAValue, string> initResult = Result.Ok<TAValue, string>(initValues);
+            return evalResults.Aggregate(initResult, (agr, x) => agrFunc(agr, x, filterTargetFunc, filterValuesFunc, selectValuesFunc, selectResultFunc));
         }
     }
 }
