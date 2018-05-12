@@ -664,23 +664,23 @@
     ]
   },
   "packageFolders": {
-    "/Users/ladislavlisy/.nuget/packages/": {},
-    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "C:\\Users\\Ladislav Lisy\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/PayrollGeekApp.csproj",
+      "projectUniqueName": "C:\\PROJEKTY_GIT\\GeekPayrollVsCode\\PayrollGeekApp\\PayrollGeekApp.csproj",
       "projectName": "PayrollGeekApp",
-      "projectPath": "/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/PayrollGeekApp.csproj",
-      "packagesPath": "/Users/ladislavlisy/.nuget/packages/",
-      "outputPath": "/Users/ladislavlisy/Projects/GeekPayrollVcode/PayrollGeekApp/obj/",
+      "projectPath": "C:\\PROJEKTY_GIT\\GeekPayrollVsCode\\PayrollGeekApp\\PayrollGeekApp.csproj",
+      "packagesPath": "C:\\Users\\Ladislav Lisy\\.nuget\\packages\\",
+      "outputPath": "C:\\PROJEKTY_GIT\\GeekPayrollVsCode\\PayrollGeekApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/ladislavlisy/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Ladislav Lisy\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
